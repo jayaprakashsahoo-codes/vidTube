@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="vidtube-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#dc2626" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background Container -->
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="url(#vidtube-grad)" filter="url(#shadow)" />
+  
+  <!-- Play Icon / Video Symbol -->
+  <polygon points="40,30 72,50 40,70" fill="#ffffff" stroke-linejoin="round" />
+</svg>
