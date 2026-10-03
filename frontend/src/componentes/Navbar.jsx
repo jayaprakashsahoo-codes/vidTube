@@ -133,8 +133,8 @@ const Navbar = () => {
               }}
               className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold bg-white hover:bg-zinc-100 text-zinc-900 rounded-full transition-colors active:scale-95"
             >
-              <Plus className="w-4 h-4 stroke-[2.5]" />
-              <span>Create</span>
+              <Plus className="w-4 h-4 stroke-[3.2] " />
+              <span className="font-extrabold">Create</span>
             </button>
 
             {/* Create Dropdown Menu */}
