@@ -129,7 +129,7 @@ const Dashboard = () => {
               {stats?.totalViews?.toLocaleString() || 0}
             </p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 flex items-center justify-center">
             <Eye className="w-6 h-6" />
           </div>
         </div>
@@ -141,7 +141,7 @@ const Dashboard = () => {
               {stats?.totalSubscribers?.toLocaleString() || 0}
             </p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 flex items-center justify-center">
             <Users className="w-6 h-6" />
           </div>
         </div>
@@ -153,7 +153,7 @@ const Dashboard = () => {
               {stats?.totalLikes?.toLocaleString() || 0}
             </p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 flex items-center justify-center">
             <ThumbsUp className="w-6 h-6" />
           </div>
         </div>
@@ -165,7 +165,7 @@ const Dashboard = () => {
               {stats?.totalVideos?.toLocaleString() || 0}
             </p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 flex items-center justify-center">
             <Video className="w-6 h-6" />
           </div>
         </div>
@@ -205,7 +205,7 @@ const Dashboard = () => {
                           <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                         </Link>
                         <div className="min-w-0 max-w-xs">
-                          <Link to={`/video/${video._id}`} className="font-semibold text-zinc-900 dark:text-zinc-100 hover:text-blue-600 truncate block text-sm">
+                          <Link to={`/video/${video._id}`} className="font-semibold text-zinc-900 dark:text-zinc-100 truncate block text-sm">
                             {video.title}
                           </Link>
                           <p className="text-xs text-zinc-500 truncate mt-0.5">{video.description}</p>
@@ -217,21 +217,17 @@ const Dashboard = () => {
                     <td className="px-6 py-4">
                       <button
                         onClick={() => handleToggleVisibility(video._id)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all border ${
-                          video.isPublished
-                            ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-950/40 dark:border-green-800 dark:text-green-400 hover:bg-green-100'
-                            : 'bg-zinc-100 border-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 hover:bg-zinc-200'
-                        }`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 shadow-xs hover:border-zinc-400 dark:hover:border-zinc-500 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 active:scale-95 transition-all cursor-pointer"
                         title="Click to toggle visibility"
                       >
                         {video.isPublished ? (
                           <>
-                            <Globe className="w-3.5 h-3.5" />
+                            <Globe className="w-3 h-3 text-zinc-500 dark:text-zinc-400" />
                             <span>Public</span>
                           </>
                         ) : (
                           <>
-                            <Lock className="w-3.5 h-3.5" />
+                            <Lock className="w-3 h-3 text-zinc-500 dark:text-zinc-400" />
                             <span>Private</span>
                           </>
                         )}
@@ -261,14 +257,14 @@ const Dashboard = () => {
                             setSelectedVideo(video);
                             setIsEditModalOpen(true);
                           }}
-                          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg transition-colors"
+                          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg transition-colors"
                           title="Edit Video"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteVideo(video._id, video.title)}
-                          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-colors"
+                          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg transition-colors"
                           title="Delete Video"
                         >
                           <Trash2 className="w-4 h-4" />

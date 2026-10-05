@@ -157,29 +157,29 @@ const Playlists = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-8 animate-in fade-in duration-300">
-      {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-violet-500/10 dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-violet-950/30 border border-zinc-200/80 dark:border-zinc-800/80 p-6 sm:p-8 backdrop-blur-xl shadow-lg">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="p-4 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-lg shadow-indigo-500/20">
-              <ListVideo className="w-8 h-8" />
+      {/* Minimal Header Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200/80 dark:border-zinc-800/80 px-4 py-3 sm:px-5 sm:py-3.5 backdrop-blur-xl shadow-xs">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700/60 shadow-xs shrink-0">
+              <ListVideo className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+              <h1 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight leading-tight">
                 My Playlists
               </h1>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-                Organize and curate your favorite video collections
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 hidden sm:block">
+                Organize and curate your video collections
               </p>
             </div>
           </div>
 
           <button
             onClick={() => setIsCreateOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-lg shadow-indigo-600/25 transition-all hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 font-semibold text-xs sm:text-sm shadow-xs transition-all active:scale-95 cursor-pointer shrink-0"
           >
-            <Plus className="w-5 h-5" />
-            Create Playlist
+            <Plus className="w-4 h-4" />
+            <span>Create Playlist</span>
           </button>
         </div>
       </div>
@@ -187,7 +187,7 @@ const Playlists = () => {
       {/* Loading state */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-20">
-          <Loader2 className="w-10 h-10 animate-spin text-indigo-600" />
+          <Loader2 className="w-10 h-10 animate-spin text-zinc-500" />
           <p className="text-sm text-zinc-500 mt-4">Loading your playlists...</p>
         </div>
       )}
@@ -211,7 +211,7 @@ const Playlists = () => {
           </p>
           <button
             onClick={() => setIsCreateOpen(true)}
-            className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-sm font-semibold transition shadow-md shadow-indigo-600/20"
+            className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 rounded-2xl text-sm font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             Create Your First Playlist
@@ -253,14 +253,14 @@ const Playlists = () => {
                     <button
                       onClick={(e) => handleStartEdit(playlist, e)}
                       title="Edit Playlist"
-                      className="p-2 rounded-xl bg-black/60 hover:bg-indigo-600 text-white backdrop-blur-md transition"
+                      className="p-2 rounded-xl bg-black/60 hover:bg-zinc-800 text-white backdrop-blur-md transition"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={(e) => handleDeletePlaylist(playlist._id, e)}
                       title="Delete Playlist"
-                      className="p-2 rounded-xl bg-black/60 hover:bg-rose-600 text-white backdrop-blur-md transition"
+                      className="p-2 rounded-xl bg-black/60 hover:bg-zinc-800 text-white backdrop-blur-md transition"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -270,7 +270,7 @@ const Playlists = () => {
                 {/* Content */}
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-bold text-lg text-zinc-900 dark:text-zinc-100 line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                    <h3 className="font-bold text-lg text-zinc-900 dark:text-zinc-100 line-clamp-1 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
                       {playlist.name}
                     </h3>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2 mt-1">
@@ -280,7 +280,7 @@ const Playlists = () => {
 
                   <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between text-xs text-zinc-400">
                     <span>Created {new Date(playlist.createdAt || Date.now()).toLocaleDateString()}</span>
-                    <span className="font-medium text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                    <span className="font-medium text-zinc-700 dark:text-zinc-300 flex items-center gap-1">
                       View Playlist →
                     </span>
                   </div>
@@ -313,7 +313,7 @@ const Playlists = () => {
             <div className="p-6 overflow-y-auto flex-1 space-y-4">
               {loadingActivePlaylist ? (
                 <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+                  <Loader2 className="w-8 h-8 animate-spin text-zinc-500" />
                 </div>
               ) : !activePlaylist.videos || activePlaylist.videos.length === 0 ? (
                 <div className="text-center py-12 text-zinc-500">
@@ -329,7 +329,7 @@ const Playlists = () => {
                         <button
                           onClick={() => handleRemoveVideoFromPlaylist(videoObj._id)}
                           title="Remove from Playlist"
-                          className="absolute top-3 right-3 p-2 rounded-full bg-black/70 hover:bg-rose-600 text-white opacity-0 group-hover:opacity-100 transition z-10"
+                          className="absolute top-3 right-3 p-2 rounded-full bg-black/70 hover:bg-zinc-800 text-white opacity-0 group-hover:opacity-100 transition z-10"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -363,7 +363,7 @@ const Playlists = () => {
                   placeholder="e.g. My Favorite Music Videos"
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/30 dark:focus:ring-zinc-600/30"
                 />
               </div>
 
@@ -374,7 +374,7 @@ const Playlists = () => {
                   placeholder="Brief description of what this playlist contains..."
                   value={newPlaylistDesc}
                   onChange={(e) => setNewPlaylistDesc(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/30 dark:focus:ring-zinc-600/30"
                 />
               </div>
 
@@ -382,16 +382,16 @@ const Playlists = () => {
                 <button
                   type="button"
                   onClick={() => setIsCreateOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                  className="px-4 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating || !newPlaylistName.trim()}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold disabled:opacity-50 flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 text-sm font-semibold disabled:opacity-50 flex items-center gap-2 transition-all shadow-sm active:scale-95 cursor-pointer"
                 >
-                  {creating && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {creating && <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />}
                   Create
                 </button>
               </div>
@@ -419,7 +419,7 @@ const Playlists = () => {
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/30 dark:focus:ring-zinc-600/30"
                 />
               </div>
 
@@ -429,7 +429,7 @@ const Playlists = () => {
                   rows={3}
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/30 dark:focus:ring-zinc-600/30"
                 />
               </div>
 
@@ -437,16 +437,16 @@ const Playlists = () => {
                 <button
                   type="button"
                   onClick={() => setEditingPlaylist(null)}
-                  className="px-4 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                  className="px-4 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={updating || !editName.trim()}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold disabled:opacity-50 flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 text-sm font-semibold disabled:opacity-50 flex items-center gap-2 transition-all shadow-sm active:scale-95 cursor-pointer"
                 >
-                  {updating && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {updating && <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />}
                   Save Changes
                 </button>
               </div>

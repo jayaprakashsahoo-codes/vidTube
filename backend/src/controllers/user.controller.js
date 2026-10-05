@@ -37,31 +37,30 @@ const registerUser = asyncHandler( async (req, res) => {
 
 
     const {fullName, email, username, password } = req.body
-    //console.log("email: ", email);
 
     if (
-        [fullName, email, username, password].some((field) => field?.trim() === "")
+        [fullName, email, username, password].some((field) => !field || field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
 
+    const normalizedUsername = username.trim().toLowerCase();
+    const normalizedEmail = email.trim().toLowerCase();
+
     const existedUser = await User.findOne({
-        $or: [{ username }, { email }]
+        $or: [{ username: normalizedUsername }, { email: normalizedEmail }]
     })
 
     if (existedUser) {
         throw new ApiError(409, "User with email or username already exists")
     }
-    //console.log(req.files);
 
     const avatarLocalPath = req.files?.avatar?.[0]?.path;
-    //const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
     let coverImageLocalPath;
     if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
         coverImageLocalPath = req.files.coverImage[0].path
     }
-    
 
     if (!avatarLocalPath) {
         throw new ApiError(400, "Avatar file is required")
@@ -73,15 +72,14 @@ const registerUser = asyncHandler( async (req, res) => {
     if (!avatar) {
         throw new ApiError(400, "Avatar file is required")
     }
-   
 
     const user = await User.create({
-        fullName,
+        fullName: fullName.trim(),
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
-        email, 
+        email: normalizedEmail, 
         password,
-        username: username.toLowerCase()
+        username: normalizedUsername
     })
 
     const createdUser = await User.findById(user._id).select(
@@ -93,7 +91,7 @@ const registerUser = asyncHandler( async (req, res) => {
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "User registered Successfully")
+        new ApiResponse(201, createdUser, "User registered Successfully")
     )
 
 } )
@@ -101,16 +99,23 @@ const registerUser = asyncHandler( async (req, res) => {
 const loginUser = asyncHandler(async (req, res) =>{
     const {email, username, password} = req.body
 
-    if (!username && !email) {
-        throw new ApiError(400, "username or email is required")
+    if (!password) {
+        throw new ApiError(400, "Password is required")
+    }
+
+    const trimmedUsername = username?.trim()
+    const trimmedEmail = email?.trim()
+
+    if (!trimmedUsername && !trimmedEmail) {
+        throw new ApiError(400, "Username or email is required")
     }
 
     const searchCriteria = [];
-    if (username?.trim()) {
-        searchCriteria.push({ username: username.trim().toLowerCase() });
+    if (trimmedUsername) {
+        searchCriteria.push({ username: trimmedUsername.toLowerCase() });
     }
-    if (email?.trim()) {
-        searchCriteria.push({ email: email.trim().toLowerCase() });
+    if (trimmedEmail) {
+        searchCriteria.push({ email: trimmedEmail.toLowerCase() });
     }
 
     const user = await User.findOne({
@@ -134,7 +139,7 @@ const loginUser = asyncHandler(async (req, res) =>{
     const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     }
 
@@ -170,7 +175,8 @@ const logoutUser = asyncHandler(async(req, res) => {
     const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax"
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     }
 
     return res
@@ -207,7 +213,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         const options = {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         }
     
@@ -264,7 +270,7 @@ const getCurrentUser = asyncHandler(async(req, res) => {
 const updateAccountDetails = asyncHandler(async(req, res) => {
     const {fullName, email} = req.body
 
-    if (!fullName || !email) {
+    if (!fullName?.trim() || !email?.trim()) {
         throw new ApiError(400, "All fields are required")
     }
 
@@ -272,8 +278,8 @@ const updateAccountDetails = asyncHandler(async(req, res) => {
         req.user?._id,
         {
             $set: {
-                fullName,
-                email: email
+                fullName: fullName.trim(),
+                email: email.trim().toLowerCase()
             }
         },
         {new: true}
@@ -369,10 +375,12 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
         throw new ApiError(400, "username is missing")
     }
 
+    const currentUserId = req.user?._id ? new mongoose.Types.ObjectId(req.user._id) : null;
+
     const channel = await User.aggregate([
         {
             $match: {
-                username: username?.toLowerCase()
+                username: username.trim().toLowerCase()
             }
         },
         {
@@ -399,13 +407,15 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
                 channelsSubscribedToCount: {
                     $size: "$subscribedTo"
                 },
-                isSubscribed: {
-                    $cond: {
-                        if: {$in: [req.user?._id, "$subscribers.subscriber"]},
-                        then: true,
-                        else: false
+                isSubscribed: currentUserId
+                    ? {
+                        $cond: {
+                            if: {$in: [currentUserId, "$subscribers.subscriber"]},
+                            then: true,
+                            else: false
+                        }
                     }
-                }
+                    : false
             }
         },
         {
@@ -418,7 +428,6 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
                 avatar: 1,
                 coverImage: 1,
                 email: 1
-
             }
         }
     ])

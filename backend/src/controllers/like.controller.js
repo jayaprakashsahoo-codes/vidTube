@@ -21,13 +21,16 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
         throw new ApiError(404,"video not found")
     }
     const like = await Like.findOne({video:videoId,likedBy:userId});
+    let isLiked;
     if(like){
         await like.deleteOne();
-        return res.status(200).json(new ApiResponse(200,{ isLiked: false },"Video unliked successfully"))
+        isLiked = false;
     }else{
         await Like.create({video:videoId,likedBy:userId});
-        return res.status(200).json(new ApiResponse(200,{ isLiked: true },"Video liked successfully"))
-    }  
+        isLiked = true;
+    }
+    const likesCount = await Like.countDocuments({ video: videoId });
+    return res.status(200).json(new ApiResponse(200, { isLiked, likesCount }, isLiked ? "Video liked successfully" : "Video unliked successfully"));
 })
 
 const toggleCommentLike = asyncHandler(async (req, res) => {
@@ -44,18 +47,21 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
         throw new ApiError(404,"comment not found")
     }
     const like = await Like.findOne({comment:commentId,likedBy:userId});
+    let isLiked;
     if(like){
         await like.deleteOne();
-        return res.status(200).json(new ApiResponse(200,{ isLiked: false },"Comment unliked successfully"))
+        isLiked = false;
     }else{
         await Like.create({comment:commentId,likedBy:userId});
-        return res.status(200).json(new ApiResponse(200,{ isLiked: true },"Comment liked successfully"))
-    }  
+        isLiked = true;
+    }
+    const likesCount = await Like.countDocuments({ comment: commentId });
+    return res.status(200).json(new ApiResponse(200, { isLiked, likesCount }, isLiked ? "Comment liked successfully" : "Comment unliked successfully"));
 })
 
 const toggleTweetLike = asyncHandler(async (req, res) => {
     const {tweetId} = req.params
-     if(!isValidObjectId(tweetId)){
+    if(!isValidObjectId(tweetId)){
         throw new ApiError(400,"Invalid tweet id")
     }
     const userId=req.user?._id;
@@ -67,13 +73,16 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
         throw new ApiError(404,"tweet not found")
     }
     const like = await Like.findOne({tweet:tweetId,likedBy:userId});
+    let isLiked;
     if(like){
         await like.deleteOne();
-        return res.status(200).json(new ApiResponse(200,{ isLiked: false },"Tweet unliked successfully"))
+        isLiked = false;
     }else{
         await Like.create({tweet:tweetId,likedBy:userId});
-        return res.status(200).json(new ApiResponse(200,{ isLiked: true },"Tweet liked successfully"))
-    }  
+        isLiked = true;
+    }
+    const likesCount = await Like.countDocuments({ tweet: tweetId });
+    return res.status(200).json(new ApiResponse(200, { isLiked, likesCount }, isLiked ? "Tweet liked successfully" : "Tweet unliked successfully"));
 })
 
 

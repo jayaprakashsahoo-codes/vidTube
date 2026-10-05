@@ -23,6 +23,13 @@ const formatViews = (views) => {
   return views.toString();
 };
 
+const formatLikes = (count) => {
+  if (!count || count <= 0) return 'Like';
+  if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+  if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
+  return count.toString();
+};
+
 const formatTimeAgo = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
@@ -76,8 +83,8 @@ const VideoDetails = () => {
       const response = await getVideoByIdApi(videoId);
       const videoData = response.data;
       setVideo(videoData);
-      setIsLiked(videoData.isLiked || false);
-      setLikeCount(videoData.likesCount || 0);
+      setIsLiked(Boolean(videoData.isLiked));
+      setLikeCount(Number(videoData.likesCount) || 0);
 
       // Fetch owner channel profile for sub status
       if (videoData.owner?.username) {
@@ -141,13 +148,26 @@ const VideoDetails = () => {
       alert('Please log in to like this video.');
       return;
     }
+    const previousIsLiked = isLiked;
+    const previousLikeCount = likeCount;
+
+    // Optimistic UI update
+    const nextIsLiked = !previousIsLiked;
+    setIsLiked(nextIsLiked);
+    setLikeCount((prev) => Math.max(0, prev + (nextIsLiked ? 1 : -1)));
+
     try {
-      setIsLiked((prev) => !prev);
-      setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
-      await toggleVideoLikeApi(videoId);
+      const res = await toggleVideoLikeApi(videoId);
+      if (res.data) {
+        setIsLiked(Boolean(res.data.isLiked));
+        if (typeof res.data.likesCount === 'number') {
+          setLikeCount(res.data.likesCount);
+        }
+      }
     } catch (err) {
-      setIsLiked((prev) => !prev);
-      setLikeCount((prev) => (isLiked ? prev + 1 : prev - 1));
+      // Revert on error
+      setIsLiked(previousIsLiked);
+      setLikeCount(previousLikeCount);
       alert(err.message || 'Failed to toggle like.');
     }
   };
@@ -219,24 +239,39 @@ const VideoDetails = () => {
     }
   };
 
-  const handleToggleCommentLike = async (commentId, currentIsLiked) => {
+  const handleToggleCommentLike = async (commentId) => {
     if (!isLoggedIn) {
       alert('Please log in to like a comment.');
       return;
     }
+    // Optimistic UI update
+    setComments((prev) =>
+      prev.map((c) =>
+        c._id === commentId
+          ? {
+              ...c,
+              isLiked: !c.isLiked,
+              likesCount: Math.max(0, (c.likesCount || 0) + (c.isLiked ? -1 : 1)),
+            }
+          : c
+      )
+    );
+
     try {
-      setComments((prev) =>
-        prev.map((c) =>
-          c._id === commentId
-            ? {
-                ...c,
-                isLiked: !c.isLiked,
-                likesCount: (c.likesCount || 0) + (c.isLiked ? -1 : 1),
-              }
-            : c
-        )
-      );
-      await toggleCommentLikeApi(commentId);
+      const res = await toggleCommentLikeApi(commentId);
+      if (res.data && typeof res.data.likesCount === 'number') {
+        setComments((prev) =>
+          prev.map((c) =>
+            c._id === commentId
+              ? {
+                  ...c,
+                  isLiked: res.data.isLiked,
+                  likesCount: res.data.likesCount,
+                }
+              : c
+          )
+        );
+      }
     } catch (err) {
       fetchComments();
     }
@@ -339,14 +374,14 @@ const VideoDetails = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={handleToggleVideoLike}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-colors border ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-colors border bg-white/5 border-white/10 hover:bg-white/10 ${
                 isLiked
-                  ? 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-                  : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10'
+                  ? 'text-blue-400'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
               <ThumbsUp className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
-              <span>{likeCount > 0 ? likeCount : 'Like'}</span>
+              <span>{formatLikes(likeCount)}</span>
             </button>
 
             {isLoggedIn && (

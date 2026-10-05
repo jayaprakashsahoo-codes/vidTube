@@ -94,13 +94,26 @@ const Tweet = () => {
             ? {
                 ...t,
                 isLiked: !t.isLiked,
-                likesCount: (t.likesCount || 0) + (t.isLiked ? -1 : 1),
+                likesCount: Math.max(0, (t.likesCount || 0) + (t.isLiked ? -1 : 1)),
               }
             : t
         )
       );
 
-      await toggleTweetLikeApi(tweetId);
+      const res = await toggleTweetLikeApi(tweetId);
+      if (res.data && typeof res.data.likesCount === 'number') {
+        setTweets((prev) =>
+          prev.map((t) =>
+            t._id === tweetId
+              ? {
+                  ...t,
+                  isLiked: res.data.isLiked,
+                  likesCount: res.data.likesCount,
+                }
+              : t
+          )
+        );
+      }
     } catch (err) {
       fetchTweets();
     }
@@ -285,10 +298,10 @@ const Tweet = () => {
                 <div className="pt-2 border-t border-[#222d34] flex items-center">
                   <button
                     onClick={() => handleToggleLike(tweet._id)}
-                    className={`flex items-center gap-1.5 text-xs font-semibold transition-colors px-3 py-1 rounded-full ${
+                    className={`flex items-center gap-1.5 text-xs font-semibold transition-colors px-3 py-1 rounded-full hover:bg-[#0e1518] ${
                       tweet.isLiked
-                        ? 'text-rose-400 bg-rose-950/30 border border-rose-900/40'
-                        : 'text-[#959ca3] hover:text-white hover:bg-[#0e1518]'
+                        ? 'text-rose-400'
+                        : 'text-[#959ca3] hover:text-white'
                     }`}
                   >
                     <Heart className={`w-3.5 h-3.5 ${tweet.isLiked ? 'fill-current' : ''}`} />

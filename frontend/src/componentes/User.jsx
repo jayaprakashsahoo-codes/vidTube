@@ -161,7 +161,7 @@ const User = () => {
       {/* Account Info Form */}
       <div className="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">
-          <UserIcon className="w-5 h-5 text-blue-600" />
+          <UserIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
           <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Personal Information</h2>
         </div>
 
@@ -174,7 +174,7 @@ const User = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
-                className="w-full px-4 py-2 text-sm rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 text-sm rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-zinc-400/30 dark:focus:ring-zinc-600/30"
               />
             </div>
             <div>
@@ -184,7 +184,7 @@ const User = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2 text-sm rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 text-sm rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-zinc-400/30 dark:focus:ring-zinc-600/30"
               />
             </div>
           </div>
@@ -192,7 +192,7 @@ const User = () => {
             <button
               type="submit"
               disabled={loadingAccount}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition-all disabled:opacity-50"
+              className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 font-semibold text-sm rounded-xl transition-all shadow-sm active:scale-95 disabled:opacity-50 cursor-pointer"
             >
               {loadingAccount ? 'Saving...' : 'Save Changes'}
             </button>
@@ -203,7 +203,7 @@ const User = () => {
       {/* Change Password Form */}
       <div className="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">
-          <Key className="w-5 h-5 text-zinc-400" />
+          <Key className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
           <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Security & Password</h2>
         </div>
 
@@ -217,8 +217,7 @@ const User = () => {
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
                   required
-                  placeholder="••••••••"
-                  className="w-full pl-4 pr-10 py-2 text-sm rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-red-500/50"
+                  className="w-full pl-4 pr-10 py-2 text-sm rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-zinc-400/30 dark:focus:ring-zinc-600/30"
                 />
                 <button
                   type="button"
@@ -226,7 +225,7 @@ const User = () => {
                   className="absolute right-3 top-2.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
                   title={showOldPassword ? "Hide password" : "Show password"}
                 >
-                  {showOldPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4 text-red-500" />}
+                  {showOldPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
@@ -238,8 +237,7 @@ const User = () => {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
-                  placeholder="••••••••"
-                  className="w-full pl-4 pr-10 py-2 text-sm rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-red-500/50"
+                  className="w-full pl-4 pr-10 py-2 text-sm rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-zinc-400/30 dark:focus:ring-zinc-600/30"
                 />
                 <button
                   type="button"
@@ -247,7 +245,7 @@ const User = () => {
                   className="absolute right-3 top-2.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
                   title={showNewPassword ? "Hide password" : "Show password"}
                 >
-                  {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4 text-red-500" />}
+                  {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
@@ -256,7 +254,7 @@ const User = () => {
             <button
               type="submit"
               disabled={loadingPassword}
-              className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium text-sm rounded-xl transition-all shadow-md shadow-red-600/25 active:scale-95 disabled:opacity-50 cursor-pointer"
+              className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 font-semibold text-sm rounded-xl transition-all shadow-sm active:scale-95 disabled:opacity-50 cursor-pointer"
             >
               {loadingPassword ? 'Updating...' : 'Update Password'}
             </button>
@@ -269,7 +267,7 @@ const User = () => {
         {/* Avatar Upload */}
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">
-            <Camera className="w-5 h-5 text-purple-600" />
+            <Camera className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
             <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Avatar Image</h2>
           </div>
 
@@ -287,12 +285,12 @@ const User = () => {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setAvatarFile(e.target.files[0])}
-                className="w-full text-xs text-zinc-500 dark:text-zinc-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 dark:file:bg-purple-950/40 dark:file:text-purple-300 hover:file:bg-purple-100"
+                className="w-full text-xs text-zinc-500 dark:text-zinc-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-700 dark:file:bg-zinc-800 dark:file:text-zinc-300 hover:file:bg-zinc-200 dark:hover:file:bg-zinc-700"
               />
               <button
                 type="submit"
                 disabled={loadingAvatar || !avatarFile}
-                className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-xl disabled:opacity-50 transition-all"
+                className="w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 text-xs font-semibold rounded-xl shadow-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
               >
                 {loadingAvatar ? 'Uploading...' : 'Upload Avatar'}
               </button>
@@ -303,7 +301,7 @@ const User = () => {
         {/* Cover Image Upload */}
         <div className="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">
-            <Camera className="w-5 h-5 text-teal-600" />
+            <Camera className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
             <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Cover Image</h2>
           </div>
 
@@ -320,12 +318,12 @@ const User = () => {
               type="file"
               accept="image/*"
               onChange={(e) => setCoverFile(e.target.files[0])}
-              className="w-full text-xs text-zinc-500 dark:text-zinc-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 dark:file:bg-teal-950/40 dark:file:text-teal-300 hover:file:bg-teal-100"
+              className="w-full text-xs text-zinc-500 dark:text-zinc-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-700 dark:file:bg-zinc-800 dark:file:text-zinc-300 hover:file:bg-zinc-200 dark:hover:file:bg-zinc-700"
             />
             <button
               type="submit"
               disabled={loadingCover || !coverFile}
-              className="w-full py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold rounded-xl disabled:opacity-50 transition-all"
+              className="w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 text-xs font-semibold rounded-xl shadow-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
             >
               {loadingCover ? 'Uploading...' : 'Upload Cover'}
             </button>

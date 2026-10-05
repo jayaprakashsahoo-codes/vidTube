@@ -14,6 +14,8 @@ const getVideoComments = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid video id")
     }
 
+    const userId = req.user?._id ? new mongoose.Types.ObjectId(req.user._id) : null;
+
     const commentsAggregate = Comment.aggregate([
         {
             $match: {
@@ -54,13 +56,15 @@ const getVideoComments = asyncHandler(async (req, res) => {
         {
             $addFields: {
                 likesCount: { $size: "$likes" },
-                isLiked: {
-                    $cond: {
-                        if: { $in: [req.user?._id, "$likes.likedBy"] },
-                        then: true,
-                        else: false
+                isLiked: userId
+                    ? {
+                        $cond: {
+                            if: { $in: [userId, "$likes.likedBy"] },
+                            then: true,
+                            else: false
+                        }
                     }
-                }
+                    : false
             }
         },
         {

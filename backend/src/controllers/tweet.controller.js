@@ -23,6 +23,7 @@ const getUserTweets = asyncHandler(async (req, res) => {
     if(!isValidObjectId(userId)){
         throw new ApiError(400,"invalid user id");
     }
+    const loggedInUserId = req.user?._id ? new mongoose.Types.ObjectId(req.user._id) : null;
     const tweets = await Tweet.aggregate([
         {
             $match: {
@@ -53,13 +54,15 @@ const getUserTweets = asyncHandler(async (req, res) => {
         {
             $addFields: {
                 likesCount: { $size: "$likes" },
-                isLiked: {
-                    $cond: {
-                        if: { $in: [req.user?._id, "$likes.likedBy"] },
-                        then: true,
-                        else: false
+                isLiked: loggedInUserId
+                    ? {
+                        $cond: {
+                            if: { $in: [loggedInUserId, "$likes.likedBy"] },
+                            then: true,
+                            else: false
+                        }
                     }
-                }
+                    : false
             }
         },
         {
@@ -117,6 +120,7 @@ const deleteTweet = asyncHandler(async (req, res) => {
 })
 
 const getAllTweets = asyncHandler(async (req, res) => {
+    const currentUserId = req.user?._id ? new mongoose.Types.ObjectId(req.user._id) : null;
     const tweets = await Tweet.aggregate([
         { $sort: { createdAt: -1 } },
         {
@@ -142,13 +146,15 @@ const getAllTweets = asyncHandler(async (req, res) => {
         {
             $addFields: {
                 likesCount: { $size: "$likes" },
-                isLiked: {
-                    $cond: {
-                        if: { $in: [req.user?._id, "$likes.likedBy"] },
-                        then: true,
-                        else: false
+                isLiked: currentUserId
+                    ? {
+                        $cond: {
+                            if: { $in: [currentUserId, "$likes.likedBy"] },
+                            then: true,
+                            else: false
+                        }
                     }
-                }
+                    : false
             }
         },
         {

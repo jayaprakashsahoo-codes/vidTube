@@ -112,7 +112,7 @@ const Navbar = () => {
             <input 
               type="text" 
               placeholder="Search videos, creators..." 
-              value={searchQuery}
+              value={searchQuery || ''}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-transparent outline-none text-xs text-[#f9f8ff] placeholder-[#959ca3] font-medium"
             />

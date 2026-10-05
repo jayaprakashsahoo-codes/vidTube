@@ -71,7 +71,25 @@ const getAllVideos = asyncHandler(async (req, res) => {
                     as: "owner"
                 }   
             },
-            { $set: { owner: { $first: "$owner" } } }
+            { $set: { owner: { $first: "$owner" } } },
+            {
+                $lookup: {
+                    from: "likes",
+                    localField: "_id",
+                    foreignField: "video",
+                    as: "likes"
+                }
+            },
+            {
+                $addFields: {
+                    likesCount: { $size: "$likes" }
+                }
+            },
+            {
+                $project: {
+                    likes: 0
+                }
+            }
         ]),
         { page: pageNumber, limit: pageSize }
     )
@@ -142,6 +160,8 @@ const getVideoById = asyncHandler(async (req, res) => {
         });
     }
 
+    const userId = req.user?._id ? new mongoose.Types.ObjectId(req.user._id) : null;
+
     const video = await Video.aggregate([
         {
             $match:{_id:new mongoose.Types.ObjectId(videoId)}
@@ -158,15 +178,39 @@ const getVideoById = asyncHandler(async (req, res) => {
                             username:1,
                             avatar:1,
                             fullName:1,
-                            
                         }
                     }
                 ]
             }
         },
-        {$addFields:{
-            owner:{$first:"$owner"}
-        }},
+        {
+            $lookup: {
+                from: "likes",
+                localField: "_id",
+                foreignField: "video",
+                as: "likes"
+            }
+        },
+        {
+            $addFields:{
+                owner:{$first:"$owner"},
+                likesCount: { $size: "$likes" },
+                isLiked: userId
+                    ? {
+                        $cond: {
+                            if: { $in: [userId, "$likes.likedBy"] },
+                            then: true,
+                            else: false
+                        }
+                    }
+                    : false
+            }
+        },
+        {
+            $project: {
+                likes: 0
+            }
+        }
     ])
     if(!video?.length){
         throw new ApiError(404,"Video not found")
