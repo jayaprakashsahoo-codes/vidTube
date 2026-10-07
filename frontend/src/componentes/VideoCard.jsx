@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { MoreVertical, CheckCircle2, Trash2, Share2, Check, Play } from 'lucide-react';
+import { MoreVertical, CheckCircle2, Trash2, Play } from 'lucide-react';
 
 export const formatDuration = (seconds = 0) => {
   if (!seconds) return '0:00';
@@ -48,7 +48,6 @@ export const timeAgo = (date) => {
 
 const VideoCard = ({ video, onRemoveFromHistory }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
   const menuRef = useRef(null);
 
   if (!video || !video._id) return null;
@@ -79,17 +78,6 @@ const VideoCard = ({ video, onRemoveFromHistory }) => {
     };
   }, [isMenuOpen]);
 
-  const handleShare = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const url = `${window.location.origin}/video/${_id}`;
-    navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-      setIsMenuOpen(false);
-    }, 1200);
-  };
 
   return (
     <div className="group flex flex-col w-full cursor-pointer transition-all duration-300 relative card-hover">
@@ -160,22 +148,22 @@ const VideoCard = ({ video, onRemoveFromHistory }) => {
         </div>
 
         {/* 3 Dots Menu */}
-        <div className="relative shrink-0" ref={menuRef}>
-          <button
-            className="p-1 text-[#959ca3] hover:text-white hover:bg-[#161e22] rounded-lg transition-all"
-            title="More options"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsMenuOpen(!isMenuOpen);
-            }}
-          >
-            <MoreVertical className="h-4 w-4" />
-          </button>
+        {onRemoveFromHistory && (
+          <div className="relative shrink-0" ref={menuRef}>
+            <button
+              className="p-1 text-[#959ca3] hover:text-white hover:bg-[#161e22] rounded-lg transition-all"
+              title="More options"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsMenuOpen(!isMenuOpen);
+              }}
+            >
+              <MoreVertical className="h-4 w-4" />
+            </button>
 
-          {isMenuOpen && (
-            <div className="absolute right-0 top-7 w-48 bg-[#161e22] border border-[#222d34] rounded-2xl shadow-2xl py-1.5 z-40 text-xs text-[#f9f8ff] animate-in fade-in duration-100">
-              {onRemoveFromHistory && (
+            {isMenuOpen && (
+              <div className="absolute right-0 top-7 w-48 bg-[#161e22] border border-[#222d34] rounded-2xl shadow-2xl py-1.5 z-40 text-xs text-[#f9f8ff] animate-in fade-in duration-100">
                 <button
                   onClick={(e) => {
                     e.preventDefault();
@@ -188,27 +176,10 @@ const VideoCard = ({ video, onRemoveFromHistory }) => {
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Remove from history</span>
                 </button>
-              )}
-
-              <button
-                onClick={handleShare}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-[#f9f8ff] hover:bg-[#1c262b] text-left"
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-zinc-400" />
-                    <span className="text-zinc-400">Link copied!</span>
-                  </>
-                ) : (
-                  <>
-                    <Share2 className="w-3.5 h-3.5 text-[#959ca3]" />
-                    <span>Share video</span>
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
