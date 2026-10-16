@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { publishVideoApi } from '../utils/api';
 import { X, Upload, Film, Image } from 'lucide-react';
 
 const PublishVideoModal = ({ isOpen, onClose, onSuccess = () => {} }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -43,7 +45,7 @@ const PublishVideoModal = ({ isOpen, onClose, onSuccess = () => {} }) => {
       // Reset form
       setFormData({ title: '', description: '', videoFile: null, thumbnail: null });
       if (response?.data?._id) {
-        window.location.href = `/video/${response.data._id}`;
+        navigate(`/video/${response.data._id}`);
       }
     } catch (err) {
       setError(err.message || 'An error occurred while publishing the video.');
